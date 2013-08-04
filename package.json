@@ -13,7 +13,7 @@
         "hoobr": {
             "version": "*",
             "type": "library",
-            "core": "false"
+            "core": "true"
         }
     },
     "dependencies" : {
