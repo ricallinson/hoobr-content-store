@@ -1,0 +1,35 @@
+{
+    "name": "hoobr-content-store",
+    "description": "A content store for hoobr.",
+    "version": "0.0.1",
+    "author": {
+        "name": "Ric Allinson",
+        "email": "npm@ricallinson.com"
+    },
+    "engines": {
+        "php": ">= 5.4.0"
+    },
+    "config": {
+        "hoobr": {
+            "version": "*",
+            "type": "library",
+            "core": "false"
+        }
+    },
+    "dependencies" : {
+        "php-keyval": "git://github.com/ricallinson/php-keyval.git#master"
+    },
+    "devDependencies" : {
+        "php-require": "git://github.com/ricallinson/php-require.git#master",
+        "php-tester": "git://github.com/ricallinson/php-tester.git#master",
+        "php-http": "git://github.com/ricallinson/php-http.git#master"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:ricallinson/hoobr-content-store.git"
+    },
+    "scripts": {
+        "test": "./test/run"
+    },
+    "license": "MIT"
+}

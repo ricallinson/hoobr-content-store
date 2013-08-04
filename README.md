@@ -1,4 +1,3 @@
-hoobr-content-store
-===================
+# Hoobr-content-store
 
 A content store for hoobr.
