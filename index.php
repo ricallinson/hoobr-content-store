@@ -71,8 +71,8 @@ class HoobrContentStore {
         return $this->store->delete($key);
     }
 
-    public function getKeys($from=0, $length=null) {
-        return $this->store->getKeys($from, $length);
+    public function getKeys($from = 0, $length = null, $filters = array()) {
+        return $this->store->getKeys($from, $length, $filters);
     }
 }
 
