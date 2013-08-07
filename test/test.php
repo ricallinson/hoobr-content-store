@@ -60,111 +60,142 @@ describe("hoobr-content-store", function () use ($module) {
 
     $require("php-http/request")->cfg("datroot", __DIR__ . "/fixtures");
 
-    it("should call store.put(), store.get(), store.delete() with no cache", function () use ($module) {
+    /*
+        Test the basic store.
+    */
 
-        $func = $module->exports;
+    describe("store", function () use ($module) {
 
-        $store = $func("tmp");
-        $key = "key";
-        $val = "val";
+        it("should call store.put(), store.get(), store.delete() with no cache", function () use ($module) {
 
-        $store->put($key, $val);
+            $func = $module->exports;
 
-        assert($store->get($key) === $val);
+            $store = $func("tmp");
+            $key = "key";
+            $val = "val";
 
-        $store->delete($key);
+            $store->put($key, $val);
 
-        assert($store->get($key) === null);
+            assert($store->get($key) === $val);
+
+            $store->delete($key);
+
+            assert($store->get($key) === null);
+        });
+
+        it("should call store.put(), store.get(), store.delete() with a 10 second cache", function () use ($module) {
+
+            $func = $module->exports;
+
+            $store = $func("tmp", 10);
+            $key = "key1";
+            $val = "val1";
+
+            $store->put($key, $val);
+
+            assert($store->get($key) === $val);
+
+            apc_clear_cache();
+
+            assert($store->get($key) === $val);
+
+            $store->delete($key);
+
+            assert($store->get($key) === null);
+        });
+
+        it("should return [10]", function () use ($module) {
+
+            $func = $module->exports;
+            $store = $func("range");
+
+            $keys = $store->getKeys();
+
+            assert(count($keys) === 10);
+        });
+
+        it("should return [5]", function () use ($module) {
+
+            $func = $module->exports;
+            $store = $func("range");
+
+            $keys = $store->getKeys(5);
+
+            assert(count($keys) === 5);
+        });
+
+        it("should return [1]", function () use ($module) {
+
+            $func = $module->exports;
+            $store = $func("range");
+
+            $keys = $store->getKeys(0, 1);
+
+            assert(count($keys) === 1);
+        });
+
+        it("should return [2]", function () use ($module) {
+
+            $func = $module->exports;
+            $store = $func("range");
+
+            $keys = $store->getKeys(8, 2);
+
+            assert(count($keys) === 2);
+        });
+
+        it("should return [3]", function () use ($module) {
+
+            $func = $module->exports;
+            $store = $func("range");
+
+            $keys = $store->getKeys(5, 3);
+
+            assert(count($keys) === 3);
+        });
+
+        it("should return [null] when trying to get() nothing", function () use ($module) {
+
+            $func = $module->exports;
+            $store = $func("range");
+
+            $result = $store->get("null");
+
+            assert($result === null);
+        });
+
+        it("should return [true] when trying to delete() nothing", function () use ($module) {
+
+            $func = $module->exports;
+            $store = $func("range");
+
+            $result = $store->delete("null");
+
+            assert($result === true);
+        });
     });
+    
+    /*
+        Check that what is put is got.
+    */
 
-    it("should call store.put(), store.get(), store.delete() with a 10 second cache", function () use ($module) {
+    describe("store chars check", function () use ($module) {
 
-        $func = $module->exports;
+        it("should return ", function () use ($module) {
 
-        $store = $func("tmp", 10);
-        $key = "key1";
-        $val = "val1";
+            $func = $module->exports;
 
-        $store->put($key, $val);
+            $store = $func("tmp");
+            $key = "charkey";
+            $val = "(“foo“)";
 
-        assert($store->get($key) === $val);
+            $store->put($key, $val);
 
-        apc_clear_cache();
+            assert($store->get($key) === $val);
 
-        assert($store->get($key) === $val);
+            $store->delete($key);
 
-        $store->delete($key);
-
-        assert($store->get($key) === null);
-    });
-
-    it("should return [10]", function () use ($module) {
-
-        $func = $module->exports;
-        $store = $func("range");
-
-        $keys = $store->getKeys();
-
-        assert(count($keys) === 10);
-    });
-
-    it("should return [5]", function () use ($module) {
-
-        $func = $module->exports;
-        $store = $func("range");
-
-        $keys = $store->getKeys(5);
-
-        assert(count($keys) === 5);
-    });
-
-    it("should return [1]", function () use ($module) {
-
-        $func = $module->exports;
-        $store = $func("range");
-
-        $keys = $store->getKeys(0, 1);
-
-        assert(count($keys) === 1);
-    });
-
-    it("should return [2]", function () use ($module) {
-
-        $func = $module->exports;
-        $store = $func("range");
-
-        $keys = $store->getKeys(8, 2);
-
-        assert(count($keys) === 2);
-    });
-
-    it("should return [3]", function () use ($module) {
-
-        $func = $module->exports;
-        $store = $func("range");
-
-        $keys = $store->getKeys(5, 3);
-
-        assert(count($keys) === 3);
-    });
-
-    it("should return [null] when trying to get() nothing", function () use ($module) {
-
-        $func = $module->exports;
-        $store = $func("range");
-
-        $result = $store->get("null");
-
-        assert($result === null);
-    });
-
-    it("should return [true] when trying to delete() nothing", function () use ($module) {
-
-        $func = $module->exports;
-        $store = $func("range");
-
-        $result = $store->delete("null");
-
-        assert($result === true);
+            assert($store->get($key) === null);
+        });
     });
 });

@@ -32,7 +32,7 @@ class HoobrContentStore {
 
         $status = $this->store->put($key, $val);
 
-        if ($status && $this->ttl) {
+        if ($status && $this->ttl > 0) {
             apc_store($fullkey, $val, $this->ttl);
         }
 
@@ -53,7 +53,7 @@ class HoobrContentStore {
 
         $val = $this->store->get($key);
 
-        if ($this->ttl) {
+        if ($val && $this->ttl > 0) {
             $this->put($key, $val);
         }
 
@@ -64,7 +64,7 @@ class HoobrContentStore {
 
         $fullkey = $this->prefix . $key;
 
-        if ($this->ttl) {
+        if ($this->ttl > 0) {
             apc_delete($fullkey);
         }
 
